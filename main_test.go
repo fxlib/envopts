@@ -9,18 +9,20 @@ import (
 )
 
 func TestGenerate(t *testing.T) {
-	err := exec.Command("go", "generate", "./example").Run()
+	names := []string{"example/fooenv_opts.go", "example/private_foo_env.go", "example/rabenv_opts.go"}
+	for _, fname := range names {
+		require.NoError(t, os.Remove(fname))
+	}
+
+	cmd := exec.Command("go", "generate", "./example")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
 	require.NoError(t, err)
 
-	f1, err := os.ReadFile("example/fooenv_opts.go")
-	require.NoError(t, err)
-	require.NotNil(t, f1)
-
-	f2, err := os.ReadFile("example/private_foo_env.go")
-	require.NoError(t, err)
-	require.NotNil(t, f2)
-
-	f3, err := os.ReadFile("example/rabenv_opts.go")
-	require.NoError(t, err)
-	require.NotNil(t, f3)
+	for _, fname := range names {
+		_, err := os.ReadFile(fname)
+		require.NoError(t, err)
+	}
 }
