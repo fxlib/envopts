@@ -193,7 +193,7 @@ func (g *Generator) Format() ([]byte, error) {
 	if err != nil {
 		log.Printf("warning: internal error: invalid Go generated: %s", err)
 		log.Printf("warning: compile the package to analyze the error")
-		return nil, fmt.Errorf("failed to format source: %w", err)
+		return g.out.Bytes(), nil
 	}
 
 	return src, nil
