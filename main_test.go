@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"testing"
@@ -9,7 +10,8 @@ import (
 )
 
 func TestGenerate(t *testing.T) {
-	names := []string{"example/fooenv_opts.go", "example/private_foo_env.go", "example/rabenv_opts.go"}
+	fmt.Println(os.Getwd())
+	names := []string{"./example/fooenv_opts.go", "./example/private_foo_env.go", "./example/rabenv_opts.go"}
 	for _, fname := range names {
 		require.NoError(t, os.Remove(fname))
 	}
