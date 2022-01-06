@@ -1,7 +1,7 @@
 # envopts
 ![Tests](https://github.com/fxlib/envopts/actions/workflows/tests.yml/badge.svg)
 
-Provides a code generator for turning [env](github.com/caarlos0/env) structure into functional options: https://dave.cheney.net/2014/10/17/functional-options-for-friendly-apis
+Provides a code generator for turning [env](github.com/caarlos0/env) structure into functional options: https://dave.cheney.net/2014/10/17/functional-options-for-friendly-apis. Check out the examples directory for general usage.
 
 ```
 // FooEnv would describe an environment variable struct parsed using: github.com/caarlos0/env
