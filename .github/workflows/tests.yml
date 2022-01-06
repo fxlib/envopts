@@ -16,6 +16,8 @@ jobs:
         with:
           go-version: ^1.17
         id: go
+      - name: Install goimports
+        run: go get golang.org/x/tools/cmd/goimports
       - name: Check out code
         uses: actions/checkout@v2
       - name: Get dependencies
