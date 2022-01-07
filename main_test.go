@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -20,6 +21,9 @@ func TestGenerate(t *testing.T) {
 
 	err := cmd.Run()
 	require.NoError(t, err)
+
+	// because it sometimes fails on github ci
+	time.Sleep(time.Second)
 
 	for _, fname := range names {
 		_, err := os.ReadFile(fname)
