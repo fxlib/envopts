@@ -3,14 +3,20 @@ package main
 import (
 	"os"
 	"os/exec"
+	"path/filepath"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/require"
 )
 
 func TestGenerate(t *testing.T) {
-	names := []string{"./example/fooenv_opts.go", "./example/private_foo_env.go", "./example/rabenv_opts.go"}
+	wd, err := os.Getwd()
+	require.NoError(t, err)
+
+	names := []string{
+		filepath.Join(wd, "example", "fooenv_opts.go"),
+		filepath.Join(wd, "example", "private_foo_env.go"),
+		filepath.Join(wd, "example", "rabenv_opts.go")}
 	for _, fname := range names {
 		require.NoError(t, os.Remove(fname))
 	}
@@ -19,14 +25,5 @@ func TestGenerate(t *testing.T) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	err := cmd.Run()
-	require.NoError(t, err)
-
-	// because it sometimes fails on github ci
-	time.Sleep(time.Second)
-
-	for _, fname := range names {
-		_, err := os.ReadFile(fname)
-		require.NoError(t, err)
-	}
+	require.NoError(t, cmd.Run())
 }
