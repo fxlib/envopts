@@ -3,6 +3,8 @@ package example
 import (
 	"fmt"
 	"time"
+
+	"github.com/caarlos0/env/v6"
 )
 
 //go:generate go run ../main.go -type=FooEnv
@@ -18,6 +20,9 @@ type FooEnv struct {
 	Hosts        []string      `env:"HOSTS" envSeparator:":"`
 	Duration     time.Duration `env:"DURATION"`
 	TempFolder   string        `env:"TEMP_FOLDER" envDefault:"${HOME}/tmp" envExpand:"true"`
+
+	// test external package and one tag for multiple fields
+	Foo, Dar []env.Options `env:"FOO"`
 }
 
 // BarEnv is one with a private field should result in nothing being generated

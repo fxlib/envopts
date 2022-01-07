@@ -9,8 +9,6 @@ import (
 
 type PrivOption func(*fooEnv)
 
-func WithHostsPrivOption(v []string) PrivOption         { return func(o *fooEnv) { o.Hosts = v } }
-func WithDurationPrivOption(v time.Duration) PrivOption { return func(o *fooEnv) { o.Duration = v } }
 func fromfooEnv(v *fooEnv) PrivOption {
 	return func(c *fooEnv) { *c = *v }
 }
@@ -26,3 +24,5 @@ func applyPrivOptions(opts ...PrivOption) (res fooEnv) {
 	}
 	return
 }
+func WithHostsPrivOption(v []string) PrivOption         { return func(o *fooEnv) { o.Hosts = v } }
+func WithDurationPrivOption(v time.Duration) PrivOption { return func(o *fooEnv) { o.Duration = v } }
