@@ -8,6 +8,8 @@ when the values come from environmnet variables. This code generator aims to sol
 Furthermore it also automatically takes into account any default values specified through the "envDefault" tags. And usefull documentation is generated
 when a comment is specified for each struct field.
 
+Check out the `example` directory with variations and options.
+
 ## example:
 Given the following struct for parsing env variables:
 ```Go
