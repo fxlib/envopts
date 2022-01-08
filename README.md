@@ -9,7 +9,7 @@ Furthermore it also automatically takes into account any default values specifie
 when a comment is specified for each struct field.
 
 ## example:
-Given the following struct:
+Given the following struct for parsing env variables:
 ```Go
 //go:generate go run github.com/fxlib/envopts -type=FooEnv
 
@@ -21,7 +21,7 @@ type FooEnv struct {
 	Foo, Dar []env.Options `env:"FOO"`
 }
 ```
-Running `go generate` will create the following code to facilitate the functional options:
+Running `go generate` will generate everything required for the functional option pattern:
 ```Go
 // Option is a functional option to configure FooEnv
 type Option func(*FooEnv)
@@ -53,17 +53,28 @@ func ApplyOptions(opts ...Option) (res FooEnv) {
 // WithHome configures FooEnv
 func WithHome(v string) Option { return func(o *FooEnv) { o.Home = v } }
 
-// WithHosts configures FooEnv
-func WithHosts(v []string) Option { return func(o *FooEnv) { o.Hosts = v } }
-
-// WithDuration configures: Duration of the timeout
-func WithDuration(v time.Duration) Option { return func(o *FooEnv) { o.Duration = v } }
-
-// WithFoo configures FooEnv
-func WithFoo(v []env.Options) Option { return func(o *FooEnv) { o.Foo = v } }
+// ...
 
 // WithDar configures FooEnv
 func WithDar(v []env.Options) Option { return func(o *FooEnv) { o.Dar = v } }
+
+```
+This could then be used to write code that accepts functional options like this:
+
+```Go
+// FooService behaves differently based on configuration options
+type FooService struct {
+	cfg FooEnv
+}
+
+// NewFooService inits the FooService while taking options
+func NewFooService(opts ...Option) (s *FooService) {
+	s = &FooService{
+		// set default values, overwritten by any explicitely configured options
+		cfg: ApplyOptions(opts...),
+	}
+	return
+}
 
 ```
 
