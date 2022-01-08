@@ -22,9 +22,11 @@ type FooEnv struct {
 
 ## backlog
 
+- [ ] Add comments to the generated code so developers that read it can follow what is happening. Also for godoc
 - [ ] Write some more documentation to get the point of this project across
-- [ ] Clean up the codebase, proper error handing in walking
-- [ ] Write proper unit tests instead of lazy smoke tests that call the Go command
+- [x] Clean up the codebase, proper error handing in walking
+- [x] Write proper unit tests instead of lazy smoke tests that call the Go command
 - [ ] We could read the 'required' tag and error when calling ApplyOptions when this is not provided. But it
       would required to return an extra `err` value and required options should be passed as separate arguments
       anyway.
+- [ ] Figure out how to take care of nested structs option parsing

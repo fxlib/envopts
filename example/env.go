@@ -7,10 +7,10 @@ import (
 	"github.com/caarlos0/env/v6"
 )
 
-//go:generate go run ../main.go -type=FooEnv
-//go:generate go run ../main.go -type=BarEnv
-//go:generate go run ../main.go -type=RabEnv -optionType=RabOption
-//go:generate go run ../main.go -type=fooEnv -optionType=PrivOption -output=private_foo_env.go
+//go:generate go run ../. -type=FooEnv
+//go:generate go run ../. -type=BarEnv
+//go:generate go run ../. -type=RabEnv -optionType=RabOption
+//go:generate go run ../. -type=fooEnv -optionType=PrivOption -output=private_foo_env.go
 
 type FooEnv struct {
 	Home         string        `env:"HOME"`
