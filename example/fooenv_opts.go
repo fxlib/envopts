@@ -37,23 +37,11 @@ func ApplyOptions(opts ...Option) (res FooEnv) {
 // WithHome configures FooEnv
 func WithHome(v string) Option { return func(o *FooEnv) { o.Home = v } }
 
-// WithPort configures FooEnv
-func WithPort(v int) Option { return func(o *FooEnv) { o.Port = v } }
-
-// WithPassword configures FooEnv
-func WithPassword(v string) Option { return func(o *FooEnv) { o.Password = v } }
-
-// WithIsProduction configures FooEnv
-func WithIsProduction(v bool) Option { return func(o *FooEnv) { o.IsProduction = v } }
-
 // WithHosts configures FooEnv
 func WithHosts(v []string) Option { return func(o *FooEnv) { o.Hosts = v } }
 
-// WithDuration configures FooEnv
+// WithDuration configures: Duration of the timeout
 func WithDuration(v time.Duration) Option { return func(o *FooEnv) { o.Duration = v } }
-
-// WithTempFolder configures FooEnv
-func WithTempFolder(v string) Option { return func(o *FooEnv) { o.TempFolder = v } }
 
 // WithFoo configures FooEnv
 func WithFoo(v []env.Options) Option { return func(o *FooEnv) { o.Foo = v } }

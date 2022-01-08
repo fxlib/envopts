@@ -13,13 +13,9 @@ import (
 //go:generate go run ../. -type=fooEnv -optionType=PrivOption -output=private_foo_env.go
 
 type FooEnv struct {
-	Home         string        `env:"HOME"`
-	Port         int           `env:"PORT" envDefault:"3000"`
-	Password     string        `env:"PASSWORD,unset"`
-	IsProduction bool          `env:"PRODUCTION"`
-	Hosts        []string      `env:"HOSTS" envSeparator:":"`
-	Duration     time.Duration `env:"DURATION"`
-	TempFolder   string        `env:"TEMP_FOLDER" envDefault:"${HOME}/tmp" envExpand:"true"`
+	Home     string        `env:"HOME"`
+	Hosts    []string      `env:"HOSTS" envSeparator:":"`
+	Duration time.Duration `env:"DURATION"` // Duration of the timeout
 
 	// test external package and one tag for multiple fields
 	Foo, Dar []env.Options `env:"FOO"`
