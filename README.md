@@ -22,7 +22,7 @@ type FooEnv struct {
 
 ## backlog
 
-- [ ] Add comments to the generated code so developers that read it can follow what is happening. Also for godoc
+- [x] Add comments to the generated code so developers that read it can follow what is happening. Also for godoc
 - [ ] Write some more documentation to get the point of this project across
 - [x] Clean up the codebase, proper error handing in walking
 - [x] Write proper unit tests instead of lazy smoke tests that call the Go command
@@ -30,3 +30,5 @@ type FooEnv struct {
       would required to return an extra `err` value and required options should be passed as separate arguments
       anyway.
 - [ ] Figure out how to take care of nested structs option parsing
+- [ ] Instead of depending on `goimport` being present to clean up unused or used imports it would be nice if
+      we could do everything from our own binary

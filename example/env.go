@@ -31,7 +31,7 @@ type BarEnv struct {
 }
 
 type RabEnv struct {
-	Home string `env:"HOME"`
+	Home string `env:"HOME"` // User's home directory
 }
 
 // private version of Foo

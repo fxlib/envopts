@@ -7,16 +7,25 @@ import (
 	"github.com/caarlos0/env/v6"
 )
 
+// Option is a functional option to configure FooEnv
 type Option func(*FooEnv)
 
+// FromFooEnv takes fully configured FooEnv and returns it as an option. Can be used to parse environment
+// variables manually and provide the result in places where an option argument is expected.
 func FromFooEnv(v *FooEnv) Option {
 	return func(c *FooEnv) { *c = *v }
 }
+
+// ParseEnv will parse environment variables into a slice of options. Any options for parsing the
+// environment can be supplied, for example to parse under a prefix.
 func ParseEnv(eo env.Options) (opts []Option, err error) {
 	var o FooEnv
 	opts = append(opts, FromFooEnv(&o))
 	return opts, env.Parse(&o, eo)
 }
+
+// ApplyOptions will merge all options into the resulting FooEnv while also ensuring default values are
+// always set.
 func ApplyOptions(opts ...Option) (res FooEnv) {
 	env.Parse(&res, env.Options{Environment: make(map[string]string)})
 	for _, o := range opts {
@@ -24,12 +33,30 @@ func ApplyOptions(opts ...Option) (res FooEnv) {
 	}
 	return
 }
-func WithHome(v string) Option            { return func(o *FooEnv) { o.Home = v } }
-func WithPort(v int) Option               { return func(o *FooEnv) { o.Port = v } }
-func WithPassword(v string) Option        { return func(o *FooEnv) { o.Password = v } }
-func WithIsProduction(v bool) Option      { return func(o *FooEnv) { o.IsProduction = v } }
-func WithHosts(v []string) Option         { return func(o *FooEnv) { o.Hosts = v } }
+
+// WithHome configures FooEnv
+func WithHome(v string) Option { return func(o *FooEnv) { o.Home = v } }
+
+// WithPort configures FooEnv
+func WithPort(v int) Option { return func(o *FooEnv) { o.Port = v } }
+
+// WithPassword configures FooEnv
+func WithPassword(v string) Option { return func(o *FooEnv) { o.Password = v } }
+
+// WithIsProduction configures FooEnv
+func WithIsProduction(v bool) Option { return func(o *FooEnv) { o.IsProduction = v } }
+
+// WithHosts configures FooEnv
+func WithHosts(v []string) Option { return func(o *FooEnv) { o.Hosts = v } }
+
+// WithDuration configures FooEnv
 func WithDuration(v time.Duration) Option { return func(o *FooEnv) { o.Duration = v } }
-func WithTempFolder(v string) Option      { return func(o *FooEnv) { o.TempFolder = v } }
-func WithFoo(v []env.Options) Option      { return func(o *FooEnv) { o.Foo = v } }
-func WithDar(v []env.Options) Option      { return func(o *FooEnv) { o.Dar = v } }
+
+// WithTempFolder configures FooEnv
+func WithTempFolder(v string) Option { return func(o *FooEnv) { o.TempFolder = v } }
+
+// WithFoo configures FooEnv
+func WithFoo(v []env.Options) Option { return func(o *FooEnv) { o.Foo = v } }
+
+// WithDar configures FooEnv
+func WithDar(v []env.Options) Option { return func(o *FooEnv) { o.Dar = v } }

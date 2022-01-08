@@ -70,6 +70,7 @@ func TestGenPrefix(t *testing.T) {
 	require.NoError(t, err)
 
 	require.Contains(t, string(src), `OnHome`)
+	require.Contains(t, string(src), `configures:`)
 	checkCompileErrors(t, filepath.Join(wd, "example"))
 }
 

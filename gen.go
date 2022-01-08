@@ -123,28 +123,47 @@ func (g *Gen) GenerateBody() (err error) {
 	}
 
 	// define the Option type
-	fmt.Fprintf(&g.out, "type %s func(*%s)\n", g.opts.optTypeName, g.opts.typeName)
+	fmt.Fprintf(&g.out, `
+		// %s is a functional option to configure %s
+		type %s func(*%s)
+	`+"\n", g.opts.optTypeName, g.opts.typeName, g.opts.optTypeName, g.opts.typeName)
 
 	// generate the function that generation an option func that completely sets the underlying option
-	fmt.Fprintf(&g.out, `func %srom%s(v *%s) %s {
+	fmt.Fprintf(&g.out, `
+	// %srom%s takes fully configured %s and returns it as an option. Can be used to parse environment
+	// variables manually and provide the result in places where an option argument is expected.
+	func %srom%s(v *%s) %s {
 		return func(c *%s) { *c = *v }
-	}`+"\n", firstF, strings.Title(g.opts.typeName), g.opts.typeName, g.opts.optTypeName, g.opts.typeName)
+	}`+"\n",
+		firstF, strings.Title(g.opts.typeName), g.opts.typeName,
+		firstF, strings.Title(g.opts.typeName),
+		g.opts.typeName, g.opts.optTypeName, g.opts.typeName)
 
 	// generate the function that parses the environment
-	fmt.Fprintf(&g.out, `func %sParseEnv(eo env.Options) (opts []%s, err error) {
+	fmt.Fprintf(&g.out, `
+	// %sParseEnv will parse environment variables into a slice of options. Any options for parsing the
+	// environment can be supplied, for example to parse under a prefix. 
+	func %sParseEnv(eo env.Options) (opts []%s, err error) {
 		var o %s
 		opts = append(opts, %srom%s(&o))
 		return opts, env.Parse(&o, eo)
-	}`+"\n", g.opts.optSuffix, g.opts.optTypeName, g.opts.typeName, firstF, strings.Title(g.opts.typeName))
+	}`+"\n",
+		g.opts.optSuffix, g.opts.optSuffix, g.opts.optTypeName,
+		g.opts.typeName, firstF, strings.Title(g.opts.typeName))
 
 	// generate the function apply function
-	fmt.Fprintf(&g.out, `func %spply%ss(opts ...%s) (res %s) {
+	fmt.Fprintf(&g.out, `
+	// %spply%ss will merge all options into the resulting %s while also ensuring default values are 
+	// always set.
+	func %spply%ss(opts ...%s) (res %s) {
 		env.Parse(&res, env.Options{Environment: make(map[string]string)})
 		for _, o := range opts {
 			o(&res)
 		}
 		return
-	}`+"\n", firstA, g.opts.optTypeName, g.opts.optTypeName, g.opts.typeName)
+	}`+"\n",
+		firstA, g.opts.optTypeName, g.opts.typeName,
+		firstA, g.opts.optTypeName, g.opts.optTypeName, g.opts.typeName)
 
 	// generate actual options for each field
 	for _, file := range g.pkg.Syntax {
@@ -226,9 +245,18 @@ func (w Walk) generateOptionFuncs(st *ast.StructType) (ok bool, err error) {
 			start, end := w.tf.Offset(field.Type.Pos()), w.tf.Offset(field.Type.End())
 			typ := string(d[start:end])
 
+			comment := fmt.Sprintf("configures %s", w.opts.typeName)
+			if field.Comment != nil {
+				comment = "configures: " + strings.TrimSpace(field.Comment.Text())
+			}
+
 			w.resCount++
-			fmt.Fprintf(&w.out, `func %s%s%s(v %s) %s {return func(o *%s){o.%s=v}}`+"\n",
-				w.opts.prefix, name, w.opts.optSuffix, typ, w.opts.optTypeName, w.opts.typeName, name)
+			fmt.Fprintf(&w.out, `
+			// %s%s%s %s
+			func %s%s%s(v %s) %s {return func(o *%s){o.%s=v}}`+"\n",
+				w.opts.prefix, name, w.opts.optSuffix, comment,
+				w.opts.prefix, name, w.opts.optSuffix,
+				typ, w.opts.optTypeName, w.opts.typeName, name)
 		}
 	}
 
